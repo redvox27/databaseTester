@@ -64,5 +64,5 @@ class MySqlDatabase:
 
 db = MySqlDatabase()
 #db.append_data_to_csv()
-#db.read_csv()
+# db.read_csv()
 db.test()
