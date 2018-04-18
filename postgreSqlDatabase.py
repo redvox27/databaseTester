@@ -39,7 +39,7 @@ class MySqlDatabase:
 
     def test(self):
         data_dict = {}
-        for i in range(0, 4):
+        for i in range(0, 8):
             data_list = []
             if i == 0:
                 limit = 1
@@ -57,7 +57,7 @@ class MySqlDatabase:
             data_dict[limit] = data_list
         keys = sorted(data_dict.keys())
 
-        with open('postgre_test.csv'.format(self.limit), 'a') as f:
+        with open('postgre_test2.csv'.format(self.limit), 'a') as f:
             writer = csv.writer(f, delimiter="\t")
             writer.writerow(keys)
             writer.writerows(zip(*[data_dict[key] for key in keys]))
