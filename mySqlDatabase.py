@@ -6,12 +6,17 @@ from dummyData import DummyDataGenerator
 class MySqlDatabase:
 
     def __init__(self):
-        self.db = pymysql.connect(host='localhost', port=3306, user='root', passwd='Vtl54711', db='innovatiespotter')
+        self.db = pymysql.connect(host='localhost', port=3306, user='root', passwd='vtl54711', db='innovatiespotter')
         self.cursor = self.db.cursor(cursor=pymysql.cursors.DictCursor)
+
+        self.test_db = pymysql.connect(host='localhost', port=3306, user='root', passwd='vtl54711', db='test')
+        self.test_cursor = self.test_db.cursor(cursor=pymysql.cursors.DictCursor)
+
         self.limit = 5000 * 3
         # self.limit = 1
         self.iteration_range = 100
         self.dummy = DummyDataGenerator()
+        self.max_range = 5
 
     def append_data_to_csv(self):
         data_list = []
@@ -37,7 +42,7 @@ class MySqlDatabase:
             for row in reader:
                 if row:
                     print(row)
-    def test(self):
+    def test_select_statements(self):
         data_dict = {}
         for i in range(0, 8):
             data_list = []
@@ -58,7 +63,7 @@ class MySqlDatabase:
             print(data_dict)
         keys = sorted(data_dict.keys())
 
-        with open('mysql_test2.csv', 'a') as f:
+        with open('mysql_test3.csv', 'a') as f:
             writer = csv.writer(f, delimiter="\t")
             writer.writerow(keys)
             writer.writerows(zip(*[data_dict[key] for key in keys]))
@@ -82,8 +87,60 @@ class MySqlDatabase:
             project_omschrijving))
             self.db.commit()
             print(i)
+
+
+    def test_insert_statements(self):
+        limit = 8
+        data_dict = {}
+        interval_list = [1, 2, 5000, 10000, 15000, 20000, 25000, 30000, 35000]
+        for interval in interval_list:
+            print(interval)
+            string = "insert into test.companies(aanvrager, rijksbijdrage, locatie, subsidie, status, jaar, projectnummer, projectpartner, projectomschrijving) VALUES "
+            date_list = []
+            for i in range(0, interval):
+
+                rijksbijdrage = self.dummy.generate_random_string(5)
+                subsidie = self.dummy.generate_random_string(6)
+                status = self.dummy.generate_random_string(5)
+                jaar = self.dummy.generate_random_string(4)
+                projectnummer = self.dummy.generate_random_string(10)
+                aanvrager = self.dummy.generate_random_string(30)
+                project_partner = self.dummy.generate_random_string(30)
+                project_omschrijving = self.dummy.generate_random_string(300)
+                location = self.dummy.generate_random_string(25)
+
+                string += '('
+                string += "'{}'".format(aanvrager) + ',' + "'{}'".format(rijksbijdrage) + ',' + "'{}'".format(location) + ',' + "'{}'".format(subsidie) + ',' + "'{}'".format(status) + ',' + "'{}'".format(jaar) + ',' + "'{}'".format(projectnummer) + ',' + "'{}'".format(project_partner) + ',' + "'{}'".format(project_omschrijving)
+                string += ')'
+                #todo kijk naar i of naar interval
+                #todo komma die komt of niet op de juiste plek(error zit bij meer dan 1)
+                if interval != 0:
+                    string += ','
+            if interval != 1:
+                query = string[:len(string)-1]
+            else:
+                query = string
+            print(query)
+            print('\n')
+            while len(date_list) != 100:
+                start = time.time()
+                self.test_cursor.execute(query)
+                self.db.commit()
+                stop = time.time()
+                elapsed_time = stop - start
+                if elapsed_time != 0.0:
+                    date_list.append(elapsed_time)
+            data_dict[interval] = date_list
+
+        keys = sorted(data_dict.keys())
+
+        with open('mysql_insert_test.csv', 'a') as f:
+            writer = csv.writer(f, delimiter="\t")
+            writer.writerow(keys)
+            writer.writerows(zip(*[data_dict[key] for key in keys]))
 db = MySqlDatabase()
-db.test()
+db.test_insert_statements()
+#db.test_select_statements()
 #db.insert_dummy_data()
 #db.append_data_to_csv()
 #db.read_csv()
