@@ -72,10 +72,11 @@ class MySqlDatabase:
         index = 0
         for interval in interval_list:
             print(interval)
-            string = "insert into innovatiespotter.companies(id ,aanvrager, rijksbijdrage, locatie, subsidie, status, jaar, projectnummer, projectpartner, projectomschrijving) VALUES "
+            string = "insert into innovatiespotter.companies(aanvrager, rijksbijdrage, locatie, subsidie, status, jaar, projectnummer, projectpartner, projectomschrijving, id) VALUES "
             date_list = []
             for i in range(0, interval):
-
+                index +=1
+                index_string = str(index)
                 rijksbijdrage = self.dummy.generate_random_string(5)
                 subsidie = self.dummy.generate_random_string(6)
                 status = self.dummy.generate_random_string(5)
@@ -90,7 +91,7 @@ class MySqlDatabase:
                 string += "'{}'".format(aanvrager) + ',' + "'{}'".format(rijksbijdrage) + ',' + "'{}'".format(
                     location) + ',' + "'{}'".format(subsidie) + ',' + "'{}'".format(status) + ',' + "'{}'".format(
                     jaar) + ',' + "'{}'".format(projectnummer) + ',' + "'{}'".format(
-                    project_partner) + ',' + "'{}'".format(project_omschrijving)
+                    project_partner) + ',' + "'{}'".format(project_omschrijving + ',' + "{}".format(index_string))
                 string += ')'
                 # todo kijk naar i of naar interval
                 # todo komma die komt of niet op de juiste plek(error zit bij meer dan 1)
