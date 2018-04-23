@@ -6,10 +6,10 @@ from dummyData import DummyDataGenerator
 class MySqlDatabase:
 
     def __init__(self):
-        self.db = pymysql.connect(host='localhost', port=3306, user='root', passwd='vtl54711', db='innovatiespotter')
+        self.db = pymysql.connect(host='localhost', port=3306, user='root', passwd='Vtl54711', db='innovatiespotter')
         self.cursor = self.db.cursor(cursor=pymysql.cursors.DictCursor)
 
-        self.test_db = pymysql.connect(host='localhost', port=3306, user='root', passwd='vtl54711', db='test')
+        self.test_db = pymysql.connect(host='localhost', port=3306, user='root', passwd='Vtl54711', db='test')
         self.test_cursor = self.test_db.cursor(cursor=pymysql.cursors.DictCursor)
 
         self.limit = 5000 * 3
@@ -93,6 +93,7 @@ class MySqlDatabase:
         limit = 8
         data_dict = {}
         interval_list = [1, 2, 5000, 10000, 15000, 20000, 25000, 30000, 35000]
+        #interval_list = [15000]
         for interval in interval_list:
             print(interval)
             string = "insert into test.companies(aanvrager, rijksbijdrage, locatie, subsidie, status, jaar, projectnummer, projectpartner, projectomschrijving) VALUES "
@@ -114,22 +115,27 @@ class MySqlDatabase:
                 string += ')'
                 #todo kijk naar i of naar interval
                 #todo komma die komt of niet op de juiste plek(error zit bij meer dan 1)
-                if interval != 0:
+                if interval != 1:
                     string += ','
-            if interval != 1:
+
+            if interval > 1:
                 query = string[:len(string)-1]
             else:
                 query = string
             print(query)
             print('\n')
             while len(date_list) != 100:
+                print(len(date_list))
                 start = time.time()
+                self.test_cursor.execute('set global max_allowed_packet=268435456')#32mb(in bits)
                 self.test_cursor.execute(query)
-                self.db.commit()
+                self.test_db.commit()
                 stop = time.time()
                 elapsed_time = stop - start
                 if elapsed_time != 0.0:
                     date_list.append(elapsed_time)
+                self.test_cursor.execute('truncate test.companies')
+
             data_dict[interval] = date_list
 
         keys = sorted(data_dict.keys())
@@ -138,6 +144,7 @@ class MySqlDatabase:
             writer = csv.writer(f, delimiter="\t")
             writer.writerow(keys)
             writer.writerows(zip(*[data_dict[key] for key in keys]))
+
 db = MySqlDatabase()
 db.test_insert_statements()
 #db.test_select_statements()
