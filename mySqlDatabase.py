@@ -92,7 +92,7 @@ class MySqlDatabase:
     def test_insert_statements(self):
         limit = 8
         data_dict = {}
-        interval_list = [1, 2, 5000, 10000, 15000, 20000, 25000, 30000, 35000]
+        interval_list = [1, 5000, 10000, 15000, 20000, 25000, 30000, 35000]
         #interval_list = [15000]
         for interval in interval_list:
             print(interval)
@@ -113,8 +113,7 @@ class MySqlDatabase:
                 string += '('
                 string += "'{}'".format(aanvrager) + ',' + "'{}'".format(rijksbijdrage) + ',' + "'{}'".format(location) + ',' + "'{}'".format(subsidie) + ',' + "'{}'".format(status) + ',' + "'{}'".format(jaar) + ',' + "'{}'".format(projectnummer) + ',' + "'{}'".format(project_partner) + ',' + "'{}'".format(project_omschrijving)
                 string += ')'
-                #todo kijk naar i of naar interval
-                #todo komma die komt of niet op de juiste plek(error zit bij meer dan 1)
+
                 if interval != 1:
                     string += ','
 
