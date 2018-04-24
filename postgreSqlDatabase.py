@@ -67,12 +67,12 @@ class MySqlDatabase:
     def test_insert_statements(self):
         limit = 8
         data_dict = {}
-        interval_list = [1, 2, 5000, 10000, 15000, 20000, 25000, 30000, 35000]
+        interval_list = [1, 5000, 10000, 15000, 20000, 25000, 30000, 35000]
         # interval_list = [15000]
         index = 0
         for interval in interval_list:
             print(interval)
-            string = "insert into innovatiespotter.companies(aanvrager, rijksbijdrage, locatie, subsidie, status, jaar, projectnummer, projectpartner, projectomschrijving, id) VALUES "
+            string = "insert into innovatiespotter.companies(subsidie, status, rijksbijdrage, projectpartner, projectnummer, locatie, jaar, id , aanvrager, projectomschrijving) VALUES "
             date_list = []
             for i in range(0, interval):
                 index +=1
@@ -88,10 +88,10 @@ class MySqlDatabase:
                 location = self.dummy.generate_random_string(25)
 
                 string += '('
-                string += "'{}'".format(aanvrager) + ',' + "'{}'".format(rijksbijdrage) + ',' + "'{}'".format(
-                    location) + ',' + "'{}'".format(subsidie) + ',' + "'{}'".format(status) + ',' + "'{}'".format(
-                    jaar) + ',' + "'{}'".format(projectnummer) + ',' + "'{}'".format(
-                    project_partner) + ',' + "'{}'".format(project_omschrijving + ',' + "{}".format(index_string))
+                string += "'{}'".format(subsidie) + ',' + "'{}'".format(status) + ',' + "'{}'".format(
+                    rijksbijdrage) + ',' + "'{}'".format(project_partner) + ',' + "'{}'".format(projectnummer) + ',' + "'{}'".format(
+                    location) + ',' + "'{}'".format(jaar) + ',' + "'{}'".format(
+                    index_string) + ',' + "'{}'".format(aanvrager) + ',' + "'{}'".format(project_omschrijving)
                 string += ')'
                 # todo kijk naar i of naar interval
                 # todo komma die komt of niet op de juiste plek(error zit bij meer dan 1)
@@ -114,7 +114,7 @@ class MySqlDatabase:
                 elapsed_time = stop - start
                 if elapsed_time != 0.0:
                     date_list.append(elapsed_time)
-                self.cursor.execute('truncate test.companies')
+                self.cursor.execute('truncate innovatiespotter.companies')
 
             data_dict[interval] = date_list
 
