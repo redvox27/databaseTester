@@ -51,9 +51,9 @@ class MySqlDatabase:
             else:
                 limit = 5000 * i
             while len(data_list) != 100:
-                query = "SELECT * FROM innovatiespotter.companies limit %s;"
+                query = "SELECT * FROM innovatiespotter.companies where projectomschrijving like '{}' limit {}".format('%is%', limit)
                 start = time.time()
-                self.cursor.execute(query, limit)
+                self.cursor.execute(query)
                 stop = time.time()
                 elapsed_time = stop - start
                 if elapsed_time != 0.0:
@@ -63,7 +63,7 @@ class MySqlDatabase:
             print(data_dict)
         keys = sorted(data_dict.keys())
 
-        with open('mysql_test3.csv', 'a') as f:
+        with open('mysql_where_test3.csv', 'a') as f:
             writer = csv.writer(f, delimiter="\t")
             writer.writerow(keys)
             writer.writerows(zip(*[data_dict[key] for key in keys]))
@@ -145,8 +145,8 @@ class MySqlDatabase:
             writer.writerows(zip(*[data_dict[key] for key in keys]))
 
 db = MySqlDatabase()
-db.test_insert_statements()
-#db.test_select_statements()
+#db.test_insert_statements()
+db.test_select_statements()
 #db.insert_dummy_data()
 #db.append_data_to_csv()
 #db.read_csv()
