@@ -57,11 +57,14 @@ class Plotter:
 
 
     def plot(self):
-        average_of_postgre_list = self.get_average_list('postgre_test2.csv')
-        average_of_mysql_list = self.get_average_list('mysql_test2.csv')
+        average_of_postgre_list = self.get_average_list('postgre_where_test.csv')
+        average_of_mysql_list = self.get_average_list('mysql_where_test3.csv')
+
         keys = self.data_object.get_keys('mysql_test2.csv')
         print('keys: ', str(keys))
+
         fig, ax = plt.subplots()
+
 
         ax.grid(True) #set grid
 
@@ -69,6 +72,7 @@ class Plotter:
         plt.ylabel('execution time')
         ax.plot([1, 5000, 10000, 15000, 20000, 25000, 30000, 35000], average_of_postgre_list, color='r', label='postgre')
         ax.plot([1, 5000, 10000, 15000, 20000, 25000, 30000, 35000], average_of_mysql_list, color='b', label='mysql')
+
         ax.legend()
         plt.show()
 

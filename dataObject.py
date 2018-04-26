@@ -45,5 +45,4 @@ class DataObject:
         with open(file_name, 'r') as f:
             reader = csv.reader(f)
             keys = next(reader)[0].split('\t')
-            print((keys))
             return (keys)
