@@ -48,7 +48,8 @@ class MySqlDatabase:
             else:
                 limit = 5000 * i
             while len(data_list) != 100:
-                query = "SELECT * FROM innovatiespotter.companies where projectomschrijving like '{}' limit {}".format('%is%', limit)
+                #query = "SELECT * FROM innovatiespotter.companies where projectomschrijving like '{}' limit {}".format('%is%', limit)
+                query = "SELECT * FROM innovatiespotter.companies limit {}".format(limit)
                 start = time.time()
                 self.cursor.execute(query)
                 stop = time.time()
@@ -59,7 +60,7 @@ class MySqlDatabase:
             data_dict[limit] = data_list
         keys = sorted(data_dict.keys())
 
-        with open('postgre_where_test.csv'.format(self.limit), 'a') as f:
+        with open('postgre_test3.csv'.format(self.limit), 'a') as f:
             writer = csv.writer(f, delimiter="\t")
             writer.writerow(keys)
             writer.writerows(zip(*[data_dict[key] for key in keys]))
