@@ -1,4 +1,5 @@
 import csv
+import statistics
 
 class DataObject:
 
@@ -104,3 +105,32 @@ class DataObject:
         for array in arrays:
             min_array.append(min(array))
         return min_array
+
+    def get_standard_deviations(self):
+        array_list = self.get_arrays(True)
+        st_deviation_list = []
+
+        for list in array_list:
+            st_deviation_list.append(statistics.stdev(list))
+
+        return st_deviation_list
+
+    def get_median(self):
+        array_list = self.get_arrays(True)
+        median_list = []
+
+        for list in array_list:
+            median_list.append(statistics.median(list))
+
+        return median_list
+
+    def get_q1_q3(self):
+        array_list = self.get_arrays(True)
+        quartile_list = []
+
+        for list in array_list:
+            q1 = statistics.median_low(list)
+            q2 = statistics.median_high(list)
+            quartile_list.append((q1, q2))
+
+        return quartile_list
