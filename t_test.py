@@ -5,8 +5,8 @@ import numpy as np
 class Ttest:
 
     def __init__(self):
-        self.mysql_data_object = DataObject('mysql_select_test.csv')
-        self.postgre_data_object = DataObject('postgre_test3.csv')
+        self.mysql_data_object = DataObject('mysql_where_test3.csv')
+        self.postgre_data_object = DataObject('postgre_where_test.csv')
 
     def get_arrays(self, index=0):
         print('retrieving lists....')
@@ -33,14 +33,24 @@ class Ttest:
             return True #null hypothese kan verworpen worden
 
     def calculate_average_of_database(self):
-        mysql_average_list = self.mysql_data_object.get_average_list()
-        postgre_average_list = self.mysql_data_object.get_average_list()
+        mysql_array_list = self.mysql_data_object.get_arrays()
+        postgre_array_list = self.postgre_data_object.get_arrays()
+        mysql_average_list = []
+        postgre_average_list = []
 
-        mysql_average = sum(mysql_average_list) / len(mysql_average_list)
-        postgre_average = sum(postgre_average_list) / len(postgre_average_list)
+        for array in mysql_array_list:
+            avg = sum(array) / len(array)
+            mysql_average_list.append(avg)
 
-        print(mysql_average)
-        print(postgre_average)
+        for array in postgre_array_list:
+            avg = sum(array) / len(array)
+            postgre_average_list.append(avg)
+
+        mysql_average_of_average_list = sum(mysql_average_list) / len(mysql_average_list)
+        postgre_average_of_average_list = sum(postgre_average_list) / len(postgre_average_list)
+        print(mysql_average_of_average_list)
+        print(postgre_average_of_average_list)
 
 t = Ttest()
 t.calculate_average_of_database()
+#t.get_t_value()
